@@ -39,7 +39,7 @@
 
 9. Удаление пода с помощью файла манифеста. `kubectl delete -f <pod-manifest-file-name>.yaml`
 
-#### 2. Создание Deployment.
+#### 3. Создание Deployment.
 
 1. Проверить список деплойментов. `kubectl get deployments`
 
@@ -71,5 +71,5 @@
 
 15. Удаление деплоймент с помощью файла манифеста. `kubectl delete -f <deployment-manifest-file-name>.yaml`
 
-#### Создание Service.
+#### 4. Создание Service.
 
