@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-server
+  labels:
+    env: test
+    app: server
+    owner: VladSmirnov
+spec:
+  containers:
+    - name: container-server
+      image: smirnoff410/cloudcs-lab2:server
+      ports:
+        - containerPort: 8000
