@@ -1,0 +1,128 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-nginx
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: smirnoff.ru
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: my-service-server
+            port:
+              number: 80
+  - host: auth.smirnoff.ru
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: my-service-auth
+            port:
+              number: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service-server
+  labels:
+    env: test
+spec:
+  selector:
+    app: my-server #Link to deployment
+  ports:
+    - name: app-server-listener
+      protocol: TCP
+      port: 80 # Port on LoadBalancer
+      targetPort: 8000 # Port on POD
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service-auth
+  labels:
+    env: test
+spec:
+  selector:
+    app: my-auth #Link to deployment
+  ports:
+    - name: app-auth-listener
+      protocol: TCP
+      port: 80 # Port on LoadBalancer
+      targetPort: 8500 # Port on POD
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-server-deployment
+  labels:
+    env: test
+    app: server
+spec:
+  selector:
+    matchLabels:
+      app: my-server
+  template:
+    metadata:
+      labels:
+        app: my-server
+    spec:
+      containers:
+        - name: container-my-server
+          image: smirnoff410/cloudcs-lab2:server
+          ports:
+            - containerPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-auth-deployment
+  labels:
+    env: test
+    app: auth
+spec:
+  selector:
+    matchLabels:
+      app: my-auth
+  template:
+    metadata:
+      labels:
+        app: my-auth
+    spec:
+      containers:
+        - name: container-my-auth
+          image: smirnoff410/cloudcs-lab2:auth_server
+          ports:
+            - containerPort: 8500
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: my-autoscaling
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: my-server-deployment
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target: 
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target: 
+          type: Utilization
+          averageUtilization: 80

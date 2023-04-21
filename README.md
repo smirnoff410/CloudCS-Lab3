@@ -69,7 +69,9 @@
 
 14. Создать деплоймент с помощью файла манифеста. `kubectl apply -f <deployment-manifest-file-name>.yaml`
 
-15. Удаление деплоймент с помощью файла манифеста. `kubectl delete -f <deployment-manifest-file-name>.yaml`
+15. Попробуйте прокинуть порт к поду и достучаться до него через браузер.
+
+16. Удаление деплоймент с помощью файла манифеста. `kubectl delete -f <deployment-manifest-file-name>.yaml`
 
 #### 4. Создание Service.
 
@@ -85,4 +87,36 @@
 
 5. Создать сервис с помощью файла манифеста. `kubectl apply -f <service-file-name>.yaml`
 
+6. Попробуйте достучаться до пода через браузер.
+
 6. Удаление сервиса с помощью файла манифеста. `kubectl delete -f <service-file-name>.yaml`
+
+#### 5. Создание Ingress.
+
+1. Проверьте список ингресов. `kubectl get ingress`
+
+2. Выбор ингрессов для кластера очень велик. Для примера возьмем *ingress-nginx*. Скачать его на свой кластер можно с помощью команды. `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.7.0/deploy/static/provider/cloud/deploy.yaml`
+Документация: https://kubernetes.github.io/ingress-nginx/deploy/
+
+3. Для удобного тестирования нам понадобятся доменные имена. Настроить их на локальной машине можно по следующим путям:
+**Windows**: *C:\Windows\System32\drivers\etc\hosts*
+**Linux**: */etc/hosts*
+**Mac OS**: */private/etc/hosts*
+
+4. Изучите файл с манифестом для создания ингресса.
+
+5. Создать ингресс с помощью файла манифеста. `kubectl apply -f <ingress-file-name>.yaml`
+
+6. Посмотреть подробное описание ингресса. `kubectl describe ingress`
+
+7. Попробуйте достучаться до пода через браузер.
+
+8. Удалить ингресс с помощью файла манифеста. `kubectl delete -f <ingress-file-name>.yaml`
+
+#### 6. Самостоятельная работа.
+
+1. Подготовьте пути коммуникаций между сервисами для работы в кластере.
+
+2. Подготовьте один манифест для описания всех абстракций k8s.
+
+3. Проведите нагрузочное тестирование для исследования автоматического расширения реплик.
