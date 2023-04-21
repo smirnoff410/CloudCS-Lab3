@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+  labels:
+    env: prod
+    owner: VladSmirnov
+spec:
+  selector:
+    app: my-server #Link to deployment
+  ports:
+    - name: app-listener
+      protocol: TCP
+      port: 8000 # Port on LoadBalancer
+      targetPort: 8000 # Port on POD
+  type: LoadBalancer
